@@ -1,6 +1,7 @@
 package com.quaap.audiometer;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -9,6 +10,7 @@ import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 
 import android.widget.LinearLayout;
@@ -43,13 +45,13 @@ public class MainActivity extends AppCompatActivity {
         setupMeter(Math.pow(2,15)+1, 20);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
-        final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
+
+        setScale();
 
         scaleCtrl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                scale = (seekBar.getProgress()+.001)/100;
-                scaleVal.setText(String.format("%1.2f", scale));
+                setScale();
             }
 
             @Override
@@ -75,10 +77,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
 
+        if (size.x>size.y) {
+            ((LinearLayout)findViewById(R.id.activity_main)).setOrientation(LinearLayout.HORIZONTAL);
+            ((LinearLayout)findViewById(R.id.meter_metalayout)).setMinimumWidth(size.x/2);
+        }
     }
 
 
+    private void setScale() {
+        final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
+        final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
+        scale = (scaleCtrl.getProgress()+.001)/(scaleCtrl.getMax()/2);
+        scaleVal.setText(String.format("%1.1f", scale));
+    }
 
     /**
      * Dispatch onPause() to fragments.
@@ -108,13 +123,20 @@ public class MainActivity extends AppCompatActivity {
 
         meterElements = new TextView[numBars];
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int fontsize = (int)(size.y/4.5/meterBars);
+
+        System.out.println(fontsize + " " + size.y);
+
         for (int i=0; i<meterElements.length; i++) {
             meterElements[i] = new TextView(meterLayout.getContext());
             meterElements[i].setBackgroundColor(Color.LTGRAY);
             meterLayout.addView(meterElements[i]);
             //meterElements[i].setVisibility(View.INVISIBLE);
             meterElements[i].setText("|________________|");
-            //meterElements[i].setTextSize(.7f);
+            meterElements[i].setTextSize(fontsize);
 
             meterElements[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
         }
@@ -175,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 double rmsavg = Math.sqrt(rmssum/sData.length);
 
                 latestAvg.set((int)(rmsavg/.7 * scale));
-                System.out.println(rmsavg);
+                //System.out.println(rmsavg);
                 mHandler.obtainMessage(1).sendToTarget();
 
             }
