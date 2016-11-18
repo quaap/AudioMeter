@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         scaleVal.setText(String.format("%1.1f", scale));
     }
 
+
     /**
      * Dispatch onPause() to fragments.
      */
@@ -131,14 +132,30 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(fontsize + " " + size.y);
 
         for (int i=0; i<meterElements.length; i++) {
+
             meterElements[i] = new TextView(meterLayout.getContext());
-            meterElements[i].setBackgroundColor(Color.LTGRAY);
+
             meterLayout.addView(meterElements[i]);
             //meterElements[i].setVisibility(View.INVISIBLE);
-            meterElements[i].setText("|________________|");
-            meterElements[i].setTextSize(fontsize);
 
-            meterElements[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
+            meterElements[i].setText("________________");
+            meterElements[i].setTextSize(fontsize);
+            meterElements[i].setAlpha(.05f);
+            //meterElements[i].setPadding(i,0,i,0);
+
+        }
+        for (int i=0; i<meterElements.length; i++) {
+            int ind = meterBars - i - 1;
+            int percent = i * 100/meterBars;
+
+            if (percent < 40) {
+                meterElements[ind].setBackgroundColor(Color.GREEN);
+            } else if (percent < 80) {
+                meterElements[ind].setBackgroundColor(Color.YELLOW);
+            } else {
+                meterElements[ind].setBackgroundColor(Color.RED);
+            }
+
         }
 
     }
@@ -153,18 +170,20 @@ public class MainActivity extends AppCompatActivity {
         //numberTxt.setText(numBars +" val");
         for (int i = 0; i < meterElements.length; i++) {
             int ind = meterBars-i - 1;
-            if (i<=numBars) {
-                int percent = i * 100/meterBars;
-                numberTxt.setText(numBars +" val " + percent);
-                if (percent < 40) {
-                    meterElements[ind].setBackgroundColor(Color.GREEN);
-                } else if (percent < 80) {
-                    meterElements[ind].setBackgroundColor(Color.YELLOW);
-                } else {
-                    meterElements[ind].setBackgroundColor(Color.RED);
-                }
+            if (i<numBars) {
+//                int percent = i * 100/meterBars;
+//                numberTxt.setText(numBars+"");
+//                if (percent < 40) {
+//                    meterElements[ind].setBackgroundColor(Color.GREEN);
+//                } else if (percent < 80) {
+//                    meterElements[ind].setBackgroundColor(Color.YELLOW);
+//                } else {
+//                    meterElements[ind].setBackgroundColor(Color.RED);
+//                }
+                meterElements[ind].setAlpha(1f);
             } else {
-                meterElements[ind].setBackgroundColor(Color.LTGRAY);
+                meterElements[ind].setAlpha(.05f);
+               // meterElements[ind].setBackgroundColor(Color.LTGRAY);
             }
         }
     }
@@ -209,7 +228,9 @@ public class MainActivity extends AppCompatActivity {
 
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            setMeterValue(latestAvg.intValue());
+            if (running) {
+                setMeterValue(latestAvg.intValue());
+            }
         }
     };
 
@@ -240,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        setMeterBars(0);
 
     }
 
