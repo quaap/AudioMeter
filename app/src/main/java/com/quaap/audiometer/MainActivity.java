@@ -36,13 +36,15 @@ public class MainActivity extends AppCompatActivity {
     int BufferElements2Rec = 1024;
 
     double scale = 1;
+    MeterView meterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        meterView = (MeterView)findViewById(R.id.meterLayout);
 
-        setupMeter(Math.pow(2,15)+1, 20);
+        meterView.setupMeter(Math.pow(2,15)+1, 20);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -113,80 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private TextView[] meterElements;
-    private double meterMax=0;
-    private int meterBars=0;
-
-    public void setupMeter(double meterMax, int numBars) {
-        final LinearLayout meterLayout = (LinearLayout) findViewById(R.id.meterLayout);
-        this.meterMax = meterMax;
-        this.meterBars = numBars;
-
-        meterElements = new TextView[numBars];
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int fontsize = (int)(size.y/4.5/meterBars);
-
-        System.out.println(fontsize + " " + size.y);
-
-        for (int i=0; i<meterElements.length; i++) {
-
-            meterElements[i] = new TextView(meterLayout.getContext());
-
-            meterLayout.addView(meterElements[i]);
-            //meterElements[i].setVisibility(View.INVISIBLE);
-
-            meterElements[i].setText("________________");
-            meterElements[i].setTextSize(fontsize);
-            meterElements[i].setAlpha(.05f);
-            //meterElements[i].setPadding(i,0,i,0);
-
-        }
-        for (int i=0; i<meterElements.length; i++) {
-            int ind = meterBars - i - 1;
-            int percent = i * 100/meterBars;
-
-            if (percent < 40) {
-                meterElements[ind].setBackgroundColor(Color.GREEN);
-            } else if (percent < 80) {
-                meterElements[ind].setBackgroundColor(Color.YELLOW);
-            } else {
-                meterElements[ind].setBackgroundColor(Color.RED);
-            }
-
-        }
-
-    }
-
-    public void setMeterValue(double val) {
-        setMeterBars((int)(val/meterMax * meterBars));
-    }
-
-
-    public void setMeterBars(int numBars) {
-        final TextView numberTxt = (TextView) findViewById(R.id.numberTxt);
-        //numberTxt.setText(numBars +" val");
-        for (int i = 0; i < meterElements.length; i++) {
-            int ind = meterBars-i - 1;
-            if (i<numBars) {
-//                int percent = i * 100/meterBars;
-//                numberTxt.setText(numBars+"");
-//                if (percent < 40) {
-//                    meterElements[ind].setBackgroundColor(Color.GREEN);
-//                } else if (percent < 80) {
-//                    meterElements[ind].setBackgroundColor(Color.YELLOW);
-//                } else {
-//                    meterElements[ind].setBackgroundColor(Color.RED);
-//                }
-                meterElements[ind].setAlpha(1f);
-            } else {
-                meterElements[ind].setAlpha(.05f);
-               // meterElements[ind].setBackgroundColor(Color.LTGRAY);
-            }
-        }
-    }
 
     AtomicInteger latestAvg = new AtomicInteger();
 
@@ -229,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (running) {
-                setMeterValue(latestAvg.intValue());
+                meterView.setMeterValue(latestAvg.intValue());
             }
         }
     };
@@ -261,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        setMeterBars(0);
+        meterView.setMeterBars(0);
 
     }
 

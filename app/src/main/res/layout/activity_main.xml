@@ -22,25 +22,21 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+
             android:id="@+id/numberTxt"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal" />
 
-        <LinearLayout
-            android:orientation="vertical"
+        <com.quaap.audiometer.MeterView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/toggleButton"
-            android:layout_alignParentStart="true"
+
             android:id="@+id/meterLayout"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="5dp"
-            android:layout_weight="8"
+            android:layout_weight="10"
             android:gravity="center_horizontal">
-
-        </LinearLayout>
+        </com.quaap.audiometer.MeterView>
 
     </LinearLayout>
 
