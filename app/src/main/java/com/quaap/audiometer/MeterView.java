@@ -55,7 +55,7 @@ public class MeterView extends LinearLayout {
 
     public void setupMeter(double meterMax, int numBars) {
 
-        this.mMeterMax = meterMax;
+        this.setmMeterMax(meterMax);
         this.mMeterBars = numBars;
 
         mMeterElements = new TextView[numBars];
@@ -91,7 +91,7 @@ public class MeterView extends LinearLayout {
     }
 
     public void setMeterValue(double val) {
-        setMeterBars((int) (val / mMeterMax * mMeterBars));
+        setMeterBars((int) (val / getmMeterMax() * mMeterBars));
     }
 
 
@@ -105,5 +105,13 @@ public class MeterView extends LinearLayout {
                 mMeterElements[ind].setAlpha(mAlphaInactive);
             }
         }
+    }
+
+    public double getmMeterMax() {
+        return mMeterMax;
+    }
+
+    public void setmMeterMax(double mMeterMax) {
+        this.mMeterMax = mMeterMax;
     }
 }

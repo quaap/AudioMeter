@@ -20,6 +20,7 @@ package com.quaap.audiometer;
  */
 
 
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +28,11 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -51,9 +55,10 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMeterView = (MeterView)findViewById(R.id.meterLayout);
-        mMeterView.setupMeter(Short.MAX_VALUE, 21);
 
-        mMicLevelReader = new MicLevelReader(this);
+        mMicLevelReader = new MicLevelReader(this, MicLevelReader.LevelMethod.SqrtRMS);
+
+        mMeterView.setupMeter(mMicLevelReader.getMaxLevel(), 20);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -92,12 +97,46 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         Point size = new Point();
         display.getSize(size);
 
+
+        final SharedPreferences pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
+        MicLevelReader.LevelMethod levM = MicLevelReader.LevelMethod.valueOf(pref.getString("levelMethod", MicLevelReader.LevelMethod.SqrtRMS.toString()));
+
+        final Spinner levelType = (Spinner)findViewById(R.id.levelType);
+        ArrayAdapter<MicLevelReader.LevelMethod> levelTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, MicLevelReader.LevelMethod.values());
+        levelType.setAdapter(levelTypeAdapter);
+
+
+        levelType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                MicLevelReader.LevelMethod lmeth = (MicLevelReader.LevelMethod)adapterView.getSelectedItem();
+                levelMethodChanged(lmeth);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putString("levelMethod", lmeth.toString());
+                editor.commit();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         if (size.x>size.y) {
             ((LinearLayout)findViewById(R.id.activity_main)).setOrientation(LinearLayout.HORIZONTAL);
             ((LinearLayout)findViewById(R.id.meter_metalayout)).setMinimumWidth(size.x/2);
         }
+
+        levelType.setSelection(levelTypeAdapter.getPosition(levM));
+
+        levelMethodChanged((MicLevelReader.LevelMethod)levelType.getSelectedItem());
     }
 
+
+    private void levelMethodChanged(MicLevelReader.LevelMethod levelMethod) {
+        mMicLevelReader.setLevelMethod(levelMethod);
+        mMeterView.setmMeterMax(mMicLevelReader.getMaxLevel());
+    }
 
     private void setScale() {
         final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
