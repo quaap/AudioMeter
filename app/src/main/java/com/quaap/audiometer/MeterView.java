@@ -1,12 +1,9 @@
 package com.quaap.audiometer;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;

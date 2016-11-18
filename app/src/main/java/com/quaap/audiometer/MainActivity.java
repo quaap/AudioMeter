@@ -25,7 +25,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int RECORDER_SAMPLERATE = 8000;
+    private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean running = false;
 
-    int BufferElements2Rec = 1024;
+    int BufferElements2Rec = RECORDER_SAMPLERATE/40;
 
     double scale = 1;
     MeterView meterView;
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         meterView = (MeterView)findViewById(R.id.meterLayout);
 
-        meterView.setupMeter(Math.pow(2,15)+1, 20);
+        meterView.setupMeter(Short.MAX_VALUE, 21);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -135,16 +135,24 @@ public class MainActivity extends AppCompatActivity {
 
                 int read = recorder.read(sData, 0, BufferElements2Rec);
 
+                int max = 0;
+                int avg = 0;
                 double rmssum = 0;
                 for (int i=0; i<read; i++) {
                     short dat = sData[i];
                     rmssum += dat*dat;
+                    avg += dat;
+                    if (Math.abs(dat) > max) max = Math.abs(dat);
                    // System.out.println(dat);
                 }
-                double rmsavg = Math.sqrt(rmssum/sData.length);
-
+                double rmsavg = Math.sqrt(rmssum/read);
                 latestAvg.set((int)(rmsavg/.7 * scale));
                 //System.out.println(rmsavg);
+
+
+
+                //latestAvg.set(max);
+
                 mHandler.obtainMessage(1).sendToTarget();
 
             }
