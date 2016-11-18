@@ -21,9 +21,6 @@ package com.quaap.audiometer;
 
 
 import android.graphics.Point;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,20 +35,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 
-public class MainActivity extends AppCompatActivity {
-    private static final int RECORDER_SAMPLERATE = 16000;
-    private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
-    private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
-    private static final int RECORDER_BUFFER_SIZE = RECORDER_SAMPLERATE/40;
+public class MainActivity extends AppCompatActivity implements MicLevelReader.MicLevelReaderValueListener {
 
     private Thread mRecorderThread = null;
-
-    private boolean mIsRunning = false;
-
 
     private double mScale = 1;
     private MeterView mMeterView;
     private AtomicInteger mMeterValue = new AtomicInteger();
+
+    private MicLevelReader mMicLevelReader;
 
 
     @Override
@@ -59,8 +51,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMeterView = (MeterView)findViewById(R.id.meterLayout);
-
         mMeterView.setupMeter(Short.MAX_VALUE, 21);
+
+        mMicLevelReader = new MicLevelReader(this);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -120,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        if (mIsRunning) {
+        if (mMicLevelReader.isRunning()) {
             final ToggleButton onoff = (ToggleButton) findViewById(R.id.toggleButton);
             onoff.setChecked(false);
             stopit();
@@ -131,76 +124,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    @Override
+    public void valueCalculated(double level) {
+        mMeterValue.set((int)(level * mScale));
+        //System.out.println(rmsavg);
 
-
-
-    public void sampleMic() {
-        int bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,
-                RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING);
-        AudioRecord recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                RECORDER_SAMPLERATE, RECORDER_CHANNELS,
-                RECORDER_AUDIO_ENCODING, bufferSize);
-        try {
-
-            recorder.startRecording();
-            mIsRunning = true;
-
-            while (mIsRunning && recorder.getState()==AudioRecord.STATE_INITIALIZED) {
-                short sData[] = new short[RECORDER_BUFFER_SIZE];
-
-                int read = recorder.read(sData, 0, RECORDER_BUFFER_SIZE);
-
-                int max = 0;
-                int avg = 0;
-                double rmssum = 0;
-                for (int i=0; i<read; i++) {
-                    short dat = sData[i];
-                    rmssum += dat*dat;
-                    avg += dat;
-                    if (Math.abs(dat) > max) max = Math.abs(dat);
-                   // System.out.println(dat);
-                }
-                double rmsavg = Math.sqrt(rmssum/read);
-
-                //RMS max is about .7 of raw max.
-                mMeterValue.set((int)(rmsavg/.7 * mScale));
-                //System.out.println(rmsavg);
-
-                mHandler.obtainMessage(1).sendToTarget();
-
-            }
-        } finally {
-            recorder.stop();
-            recorder.release();
-        }
+        mHandler.obtainMessage(1).sendToTarget();
     }
+
 
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-        if (mIsRunning) {
-            mMeterView.setMeterValue(mMeterValue.intValue());
-        }
+            if (mMicLevelReader.isRunning()) {
+                mMeterView.setMeterValue(mMeterValue.intValue());
+            }
         }
     };
 
 
     public void startit() {
-
-        mRecorderThread = new Thread(new Runnable() {
-            public void run() {
-                sampleMic();
-            }
-        }, "AudioListener Thread");
-
+        mRecorderThread = new Thread(mMicLevelReader, "AudioListener Thread");
         mRecorderThread.start();
-
     }
 
 
 
     public void stopit() {
-        if (mIsRunning) {
-            mIsRunning = false;
+        if (mMicLevelReader.isRunning()) {
+            mMicLevelReader.stop();
             try {
                 mRecorderThread.join();
             } catch (InterruptedException e) {
@@ -223,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
+
 
 
 }
