@@ -46,44 +46,44 @@ public class MeterView extends LinearLayout {
         setOrientation(VERTICAL);
     }
 
-    private TextView[] meterElements;
-    private double meterMax = 0;
-    private int meterBars = 0;
+    private TextView[] mMeterElements;
+    private double mMeterMax = 0;
+    private int mMeterBars = 0;
 
-    private final float alphaInactive = .03f;
-    private final float alphaActive = 1f;
+    private final float mAlphaInactive = .03f;
+    private final float mAlphaActive = 1f;
 
     public void setupMeter(double meterMax, int numBars) {
 
-        this.meterMax = meterMax;
-        this.meterBars = numBars;
+        this.mMeterMax = meterMax;
+        this.mMeterBars = numBars;
 
-        meterElements = new TextView[numBars];
+        mMeterElements = new TextView[numBars];
 
         int fontsize = 9;
 
-        for (int i = 0; i < meterElements.length; i++) {
+        for (int i = 0; i < mMeterElements.length; i++) {
 
-            meterElements[i] = new TextView(getContext());
+            mMeterElements[i] = new TextView(getContext());
 
-            addView(meterElements[i]);
+            addView(mMeterElements[i]);
             addView(new Space(getContext()));
 
-            meterElements[i].setText("_________________________");
-            meterElements[i].setTextSize(fontsize);
-            meterElements[i].setAlpha(alphaInactive);
+            mMeterElements[i].setText("_________________________");
+            mMeterElements[i].setTextSize(fontsize);
+            mMeterElements[i].setAlpha(mAlphaInactive);
 
         }
-        for (int i = 0; i < meterElements.length; i++) {
-            int ind = meterBars - i - 1;
-            int percent = i * 100 / meterBars;
+        for (int i = 0; i < mMeterElements.length; i++) {
+            int ind = mMeterBars - i - 1;
+            int percent = i * 100 / mMeterBars;
 
             if (percent < 40) {
-                meterElements[ind].setBackgroundColor(Color.GREEN);
+                mMeterElements[ind].setBackgroundColor(Color.GREEN);
             } else if (percent < 70) {
-                meterElements[ind].setBackgroundColor(Color.YELLOW);
+                mMeterElements[ind].setBackgroundColor(Color.YELLOW);
             } else {
-                meterElements[ind].setBackgroundColor(Color.RED);
+                mMeterElements[ind].setBackgroundColor(Color.RED);
             }
 
         }
@@ -91,18 +91,18 @@ public class MeterView extends LinearLayout {
     }
 
     public void setMeterValue(double val) {
-        setMeterBars((int) (val / meterMax * meterBars));
+        setMeterBars((int) (val / mMeterMax * mMeterBars));
     }
 
 
     public void setMeterBars(int numBars) {
 
-        for (int i = 0; i < meterElements.length; i++) {
-            int ind = meterBars - i - 1;
+        for (int i = 0; i < mMeterElements.length; i++) {
+            int ind = mMeterBars - i - 1;
             if (i < numBars) {
-                meterElements[ind].setAlpha(alphaActive);
+                mMeterElements[ind].setAlpha(mAlphaActive);
             } else {
-                meterElements[ind].setAlpha(alphaInactive);
+                mMeterElements[ind].setAlpha(mAlphaInactive);
             }
         }
     }

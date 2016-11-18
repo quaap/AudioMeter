@@ -34,31 +34,33 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
-
 import java.util.concurrent.atomic.AtomicInteger;
+
+
 
 public class MainActivity extends AppCompatActivity {
     private static final int RECORDER_SAMPLERATE = 16000;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    private static final int RECORDER_BUFFER_SIZE = RECORDER_SAMPLERATE/40;
 
-    private Thread recordingThread = null;
+    private Thread mRecorderThread = null;
 
-    private boolean running = false;
+    private boolean mIsRunning = false;
 
-    private final int BufferElements2Rec = RECORDER_SAMPLERATE/40;
 
-    private double scale = 1;
-    private MeterView meterView;
+    private double mScale = 1;
+    private MeterView mMeterView;
+    private AtomicInteger mMeterValue = new AtomicInteger();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        meterView = (MeterView)findViewById(R.id.meterLayout);
+        mMeterView = (MeterView)findViewById(R.id.meterLayout);
 
-        meterView.setupMeter(Short.MAX_VALUE, 21);
+        mMeterView.setupMeter(Short.MAX_VALUE, 21);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -107,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
     private void setScale() {
         final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
-        scale = (scaleCtrl.getProgress()+.001)/(scaleCtrl.getMax()/2);
-        scaleVal.setText(String.format("%1.1f", scale));
+        mScale = (scaleCtrl.getProgress()+.001)/(scaleCtrl.getMax()/2);
+        scaleVal.setText(String.format("%1.1f", mScale));
     }
 
 
@@ -118,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
 
-        if (running) {
+        if (mIsRunning) {
             final ToggleButton onoff = (ToggleButton) findViewById(R.id.toggleButton);
             onoff.setChecked(false);
             stopit();
@@ -130,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    AtomicInteger latestAvg = new AtomicInteger();
 
 
     public void sampleMic() {
@@ -142,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
         try {
 
             recorder.startRecording();
-            running = true;
+            mIsRunning = true;
 
-            while (running && recorder.getState()==AudioRecord.STATE_INITIALIZED) {
-                short sData[] = new short[BufferElements2Rec];
+            while (mIsRunning && recorder.getState()==AudioRecord.STATE_INITIALIZED) {
+                short sData[] = new short[RECORDER_BUFFER_SIZE];
 
-                int read = recorder.read(sData, 0, BufferElements2Rec);
+                int read = recorder.read(sData, 0, RECORDER_BUFFER_SIZE);
 
                 int max = 0;
                 int avg = 0;
@@ -162,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 double rmsavg = Math.sqrt(rmssum/read);
 
                 //RMS max is about .7 of raw max.
-                latestAvg.set((int)(rmsavg/.7 * scale));
+                mMeterValue.set((int)(rmsavg/.7 * mScale));
                 //System.out.println(rmsavg);
 
                 mHandler.obtainMessage(1).sendToTarget();
@@ -176,40 +177,37 @@ public class MainActivity extends AppCompatActivity {
 
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            if (running) {
-                meterView.setMeterValue(latestAvg.intValue());
-            }
+        if (mIsRunning) {
+            mMeterView.setMeterValue(mMeterValue.intValue());
+        }
         }
     };
 
 
     public void startit() {
 
-        recordingThread = new Thread(new Runnable() {
+        mRecorderThread = new Thread(new Runnable() {
             public void run() {
                 sampleMic();
             }
         }, "AudioListener Thread");
 
-        recordingThread.start();
-
-        final TextView numberTxt = (TextView)findViewById(R.id.numberTxt);
-
+        mRecorderThread.start();
 
     }
 
 
 
     public void stopit() {
-        if (running) {
-            running = false;
+        if (mIsRunning) {
+            mIsRunning = false;
             try {
-                recordingThread.join();
+                mRecorderThread.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        meterView.setMeterBars(0);
+        mMeterView.setMeterBars(0);
 
     }
 
