@@ -26,11 +26,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Display;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
                 }
             }
         });
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
 
 
         final SharedPreferences pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
@@ -122,10 +119,6 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
             }
         });
 
-        if (size.x>size.y) {
-            ((LinearLayout)findViewById(R.id.activity_main)).setOrientation(LinearLayout.HORIZONTAL);
-            ((LinearLayout)findViewById(R.id.meter_metalayout)).setMinimumWidth(size.x/2);
-        }
 
         levelType.setSelection(levelTypeAdapter.getPosition(levM));
 

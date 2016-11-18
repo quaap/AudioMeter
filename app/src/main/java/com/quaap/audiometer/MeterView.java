@@ -60,7 +60,7 @@ public class MeterView extends LinearLayout {
 
         mMeterElements = new TextView[numBars];
 
-        int fontsize = 9;
+        int fontsize = 10;
 
         for (int i = 0; i < mMeterElements.length; i++) {
 
