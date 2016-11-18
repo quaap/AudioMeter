@@ -1,27 +1,41 @@
 package com.quaap.audiometer;
 
-import android.graphics.Color;
+/**
+ *   Copyright 2016 Tom Kliethermes
+ *
+ *   This file is part of AudioMeter.
+ *
+ *   GoalTender is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   GoalTender is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with AudioMeter.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 import android.graphics.Point;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Display;
 import android.view.View;
-
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean running = false;
 
-    int BufferElements2Rec = RECORDER_SAMPLERATE/40;
+    private final int BufferElements2Rec = RECORDER_SAMPLERATE/40;
 
-    double scale = 1;
-    MeterView meterView;
+    private double scale = 1;
+    private MeterView meterView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,12 +160,10 @@ public class MainActivity extends AppCompatActivity {
                    // System.out.println(dat);
                 }
                 double rmsavg = Math.sqrt(rmssum/read);
+
+                //RMS max is about .7 of raw max.
                 latestAvg.set((int)(rmsavg/.7 * scale));
                 //System.out.println(rmsavg);
-
-
-
-                //latestAvg.set(max);
 
                 mHandler.obtainMessage(1).sendToTarget();
 
@@ -170,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    TimerTask timerTask;
+
     public void startit() {
 
         recordingThread = new Thread(new Runnable() {
