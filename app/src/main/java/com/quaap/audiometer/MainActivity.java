@@ -20,11 +20,16 @@ package com.quaap.audiometer;
  */
 
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
@@ -34,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -87,7 +93,9 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
             @Override
             public void onClick(View view) {
                 if (onoff.isChecked()) {
-                    startit();
+                    if (!startit()) {
+                        onoff.setChecked(false);
+                    }
                 } else {
                     stopit();
                 }
@@ -123,8 +131,37 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         levelType.setSelection(levelTypeAdapter.getPosition(levM));
 
         levelMethodChanged((MicLevelReader.LevelMethod)levelType.getSelectedItem());
+        checkMicrophoneAccess();
     }
 
+
+    private boolean checkMicrophoneAccess() {
+        if (ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO},
+                    REQUEST_RECORD_AUDIO);
+            return false;
+        }
+        return true;
+    }
+
+    private static final int REQUEST_RECORD_AUDIO = 121;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_RECORD_AUDIO: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(this, "Yay!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "This application will not function without access to the microphone", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
 
     private void levelMethodChanged(MicLevelReader.LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
@@ -174,9 +211,13 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     };
 
 
-    public void startit() {
-        mRecorderThread = new Thread(mMicLevelReader, "AudioListener Thread");
-        mRecorderThread.start();
+    public boolean startit() {
+        if (checkMicrophoneAccess()) {
+            mRecorderThread = new Thread(mMicLevelReader, "AudioListener Thread");
+            mRecorderThread.start();
+            return true;
+        }
+        return false;
     }
 
 
