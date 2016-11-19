@@ -69,8 +69,10 @@ public class MicLevelReader implements Runnable {
             case RMS:
                 return Short.MAX_VALUE * .707f;
 
-            case Max:
             case Avg:
+                return Short.MAX_VALUE;
+
+            case Max:
             default:
                 return Short.MAX_VALUE;
 
