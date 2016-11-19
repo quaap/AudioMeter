@@ -23,7 +23,6 @@ package com.quaap.audiometer;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private MicLevelReader mMicLevelReader;
 
+    private static final int NUMBARS = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
         mMicLevelReader = new MicLevelReader(this, MicLevelReader.LevelMethod.SqrtRMS);
 
-        mMeterView.setupMeter(mMicLevelReader.getMaxLevel(), 20);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -167,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private void levelMethodChanged(MicLevelReader.LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
-        mMeterView.setmMeterMax(mMicLevelReader.getMaxLevel());
+        mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
     }
 
     private void setScale() {

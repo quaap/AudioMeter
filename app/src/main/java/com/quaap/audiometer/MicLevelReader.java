@@ -58,27 +58,6 @@ public class MicLevelReader implements Runnable {
         return mLevelMethod;
     }
 
-    public double getMaxLevel() {
-        switch (mLevelMethod) {
-            case LogRMS:
-                return Math.log(Short.MAX_VALUE * .707f);
-
-            case SqrtRMS:
-                return Math.sqrt(Short.MAX_VALUE * .707f);
-
-            case RMS:
-                return Short.MAX_VALUE * .707f;
-
-            case Avg:
-                return Short.MAX_VALUE;
-
-            case Max:
-            default:
-                return Short.MAX_VALUE;
-
-        }
-
-    }
 
     @Override
     public void run() {
@@ -102,43 +81,7 @@ public class MicLevelReader implements Runnable {
                 if (read==0) {
                     continue;
                 }
-                int max = 0;
-                int min = Short.MAX_VALUE;
-                double avg = 0;
-                double rmssum = 0;
-                for (int i=0; i<read; i++) {
-                    short dat = sData[i];
-                    int abs = Math.abs(dat);
-//                    if (abs>BASENOISE) {
-//                        abs -= BASENOISE;
-//                    } else {
-//                        abs=0;
-//                    }
-                    rmssum += abs*abs;
-                    avg += abs;
-                    if (abs > max) max = abs;
-                    if (abs < min) min = abs;
-                    // System.out.println(dat);
-                }
-
-               // System.out.println(min + " - " + max);
-                double rmsavg = Math.sqrt(rmssum/read);
-
-                double resultval = 0;
-                switch (mLevelMethod) {
-                    case Max:
-                        resultval = max; break;
-                    case Avg:
-                        resultval = avg/read; break;
-                    case LogRMS:
-                        resultval = Math.log(rmsavg-min); break;
-                    case SqrtRMS:
-                        resultval = Math.sqrt(rmsavg); break;
-                    case RMS:
-                        resultval = rmsavg; break;
-
-                }
-
+                double resultval = mLevelMethod.calculate(sData, read);
                 mValueListener.valueCalculated(resultval);
 
             }
@@ -148,7 +91,68 @@ public class MicLevelReader implements Runnable {
         }
     }
 
-    public enum LevelMethod {SqrtRMS, RMS, LogRMS, Max, Avg}
+    public enum LevelMethod {
+        dbFS, SqrtRMS, RMS, LogRMS, Max, Avg;
+
+        public double[] getTicks(int levels) {
+            short[] data = new short[levels];
+
+            for (int i=0; i<levels; i++) {
+                short v = (short)((i+1)*Short.MAX_VALUE/(double)levels);
+                data[i++] = v;
+            }
+
+            double[] retdata = new double[levels];
+
+            for (int i=0; i<levels; i++) {
+                retdata[i] = calculate(new short[]{data[i]}, 1);
+            }
+            return retdata;
+        }
+
+        public double calculate(short[] data, int length) {
+            int max = 0;
+            double avg = 0;
+            double rmssum = 0;
+            for (int i=0; i<length; i++) {
+                short dat = data[i];
+                int abs = Math.abs(dat);
+                switch (this) {
+                    case RMS:
+                    case LogRMS:
+                    case SqrtRMS:
+                        rmssum += abs*abs; break;
+                    case Avg:
+                        avg += abs;
+                    case Max:
+                        if (abs > max) max = abs;
+
+                }
+            }
+
+            double rmsavg;
+            double resultval = 0;
+            switch (this) {
+                case Max:
+                    resultval = max; break;
+                case Avg:
+                    resultval = avg/length; break;
+                case LogRMS:
+                    rmsavg = Math.sqrt(rmssum/length);
+                    resultval = Math.log(rmsavg); break;
+                case SqrtRMS:
+                    rmsavg = Math.sqrt(rmssum/length);
+                    resultval = Math.sqrt(rmsavg); break;
+                case RMS:
+                    rmsavg = Math.sqrt(rmssum/length);
+                    resultval = rmsavg; break;
+                case dbFS:
+                    resultval = 20*Math.log10(max/Short.MAX_VALUE); break;
+
+            }
+            return resultval;
+        }
+    }
 
     public interface MicLevelReaderValueListener {
 
