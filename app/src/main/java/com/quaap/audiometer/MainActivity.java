@@ -33,6 +33,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -215,6 +217,8 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         if (checkMicrophoneAccess()) {
             mRecorderThread = new Thread(mMicLevelReader, "AudioListener Thread");
             mRecorderThread.start();
+            Window w = this.getWindow();
+            w.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             return true;
         }
         return false;
@@ -225,6 +229,8 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     public void stopit() {
         if (mMicLevelReader.isRunning()) {
             mMicLevelReader.stop();
+            Window w = this.getWindow();
+            w.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             try {
                 mRecorderThread.join();
             } catch (InterruptedException e) {
