@@ -78,9 +78,9 @@ public class MeterView extends LinearLayout {
             int ind = mMeterBars - i - 1;
             int percent = i * 100 / mMeterBars;
 
-            if (percent < 40) {
+            if (percent < 50) {
                 mMeterElements[ind].setBackgroundColor(Color.GREEN);
-            } else if (percent < 70) {
+            } else if (percent < 75) {
                 mMeterElements[ind].setBackgroundColor(Color.YELLOW);
             } else {
                 mMeterElements[ind].setBackgroundColor(Color.RED);
