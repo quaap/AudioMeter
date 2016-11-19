@@ -16,3 +16,7 @@ The app offers a few ways to calculate the audio level to display:
 * Max: Simply find the loudest bit of each sample. Most responsive, but will peg the scale on noisey places.
 * Avg: Simple average of the sound.
 
+
+Future Features?
+* Make meter fit a variety of screen sizes.
+* Allow a log of the readings
