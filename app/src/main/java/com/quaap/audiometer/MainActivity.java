@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     @Override
     public void valueCalculated(double level) {
         mMeterValue.set((int)(level * mScale));
-        //System.out.println(rmsavg);
+        System.out.println(level);
 
         mHandler.obtainMessage(1).sendToTarget();
     }
