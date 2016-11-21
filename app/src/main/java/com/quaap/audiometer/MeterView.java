@@ -22,8 +22,10 @@ package com.quaap.audiometer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -70,13 +72,35 @@ public class MeterView extends LinearLayout {
 
         for (int i = 0; i < mMeterElements.length; i++) {
 
+            LinearLayout wrapper = new LinearLayout(getContext());
+            TextView numbers = new TextView(getContext());
+            TextView balance = new TextView(getContext());
             mMeterElements[i] = new TextView(getContext());
+            wrapper.addView(numbers);
+            wrapper.addView(mMeterElements[i]);
+            wrapper.addView(balance);
 
-            addView(mMeterElements[i]);
+            addView(wrapper);
             addView(new Space(getContext()));
 
             int ind = mMeterBars - i - 1;
-            mMeterElements[i].setText(String.format("%-5.0f",meterTicks[ind]) + "_________________________");
+
+            numbers.setTextSize(fontsize);
+            balance.setTextSize(fontsize);
+            numbers.setTypeface(Typeface.MONOSPACE);
+            balance.setTypeface(Typeface.MONOSPACE);
+            balance.setText(String.format(" %7s", ""));
+            if (i%2==0) {
+                String fmt = "%7.1f ";
+                if (meterTicks[ind]>15) {
+                    fmt = "%7.0f ";
+                }
+                numbers.setText(String.format(fmt, meterTicks[ind]));
+            } else {
+                numbers.setText(String.format(" %7s", ""));
+            }
+
+            mMeterElements[i].setText("_________________________");
             mMeterElements[i].setTextSize(fontsize);
             mMeterElements[i].setAlpha(mAlphaInactive);
 

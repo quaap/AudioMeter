@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -10,6 +11,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.quaap.audiometer.MainActivity"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/units"
+        android:gravity="center_horizontal"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -37,80 +45,112 @@
         android:layout_height="wrap_content"
         android:layout_weight="2" />
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ViewSwitcher
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_gravity="bottom|center_vertical">
+        android:layout_height="68dp"
+        android:id="@+id/ctrls"
+        android:visibility="visible">
 
-        <LinearLayout
-            android:orientation="horizontal"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:layout_marginBottom="5dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:text="Scale"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView3"
-                android:layout_weight="1"
-                android:textSize="18sp"
-                android:gravity="center" />
-
-            <SeekBar
-                android:layout_height="wrap_content"
-                android:id="@+id/scaleCtrl"
-                android:layout_weight="6"
-                android:max="20"
-                android:progress="10"
-                android:layout_width="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/scaleVal"
-                android:layout_weight="1"
-                android:gravity="center_horizontal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5">
-
-            <TextView
-                android:text="Method:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView"
-                android:layout_weight=".5" />
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/levelType"
-                android:layout_weight=".5" />
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2" />
 
             <ToggleButton
                 android:text="ToggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/toggleButton"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
                 android:layout_weight=".5"
-                android:layout_gravity="center_horizontal" />
-        </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
 
-    </LinearLayout>
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@android:drawable/arrow_up_float"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/show_ctrls" />
+
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_gravity="bottom|center_vertical">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="Scale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:gravity="center" />
+
+                <SeekBar
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scaleCtrl"
+                    android:layout_weight="6"
+                    android:max="20"
+                    android:progress="10"
+                    android:layout_width="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/scaleVal"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@android:drawable/arrow_down_float"
+                    android:id="@+id/hide_ctrls"
+                    android:layout_weight=".5" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2" />
+
+                <TextView
+                    android:text="Method:"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:layout_weight=".5" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/levelType"
+                    android:layout_weight=".5" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ViewSwitcher>
 
 </LinearLayout>

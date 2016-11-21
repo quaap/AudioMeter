@@ -21,7 +21,7 @@ package com.quaap.audiometer;
 
 
 public enum LevelMethod {
-    dbFS, SqrtRMS, RMS, LogRMS, Max, Avg;
+    dBFS, SqrtRMS, RMS, LogRMS, Max, Avg;
 
     public double[] getTicks(int levels) {
 
@@ -31,7 +31,7 @@ public enum LevelMethod {
         double[] retdata = new double[levels];
 
         for (int i=0; i<levels; i++) {
-            short v = (short)((i+1)*step - step/2);
+            short v = (short)((i+1)*step);
             retdata[i] = calculate(new short[]{v});
 
         }
@@ -56,7 +56,7 @@ public enum LevelMethod {
                     rmssum += dat*dat; break;
                 case Avg:
                     avg += Math.abs(dat); break;
-                case dbFS:
+                case dBFS:
                 case Max:
                     abs = Math.abs(dat);
                     if (abs > max) max = abs;
@@ -80,7 +80,7 @@ public enum LevelMethod {
             case RMS:
                 rmsavg = Math.sqrt(rmssum/length);
                 resultval = rmsavg; break;
-            case dbFS:
+            case dBFS:
                 resultval = 20*Math.log10(max/Short.MAX_VALUE); break;
 
         }

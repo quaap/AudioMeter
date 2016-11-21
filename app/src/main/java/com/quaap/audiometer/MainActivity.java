@@ -31,20 +31,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import android.widget.ViewSwitcher;
 
 
 public class MainActivity extends AppCompatActivity implements MicLevelReader.MicLevelReaderValueListener {
@@ -65,8 +64,24 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         setContentView(R.layout.activity_main);
         mMeterView = (MeterView)findViewById(R.id.meterLayout);
 
-        mMicLevelReader = new MicLevelReader(this, LevelMethod.dbFS);
+        mMicLevelReader = new MicLevelReader(this, LevelMethod.dBFS);
 
+        ImageButton show_ctrls = (ImageButton)findViewById(R.id.show_ctrls);
+        show_ctrls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewSwitcher ctrls = (ViewSwitcher)findViewById(R.id.ctrls);
+                ctrls.showNext();
+            }
+        });
+        ImageButton hide_ctrls = (ImageButton)findViewById(R.id.hide_ctrls);
+        hide_ctrls.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewSwitcher ctrls = (ViewSwitcher)findViewById(R.id.ctrls);
+                ctrls.showPrevious();
+            }
+        });
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -106,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
 
         final SharedPreferences pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
-        LevelMethod levM = LevelMethod.valueOf(pref.getString("levelMethod", LevelMethod.dbFS.toString()));
+        LevelMethod levM = LevelMethod.valueOf(pref.getString("levelMethod", LevelMethod.dBFS.toString()));
 
         final Spinner levelType = (Spinner)findViewById(R.id.levelType);
         ArrayAdapter<LevelMethod> levelTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, LevelMethod.values());
@@ -168,6 +183,10 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     private void levelMethodChanged(LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
         mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
+
+        TextView units = (TextView)findViewById(R.id.units);
+        units.setText(levelMethod.toString());
+
 //        double [] ticks = levelMethod.getTicks(NUMBARS);
 //        for (int i=0; i<ticks.length; i++) {
 //            Log.d("ticks", i + " " + ticks[i]);
