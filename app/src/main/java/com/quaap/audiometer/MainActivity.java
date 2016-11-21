@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private MicLevelReader mMicLevelReader;
 
-    private static final int NUMBARS = 10;
+    private static final int NUMBARS = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
