@@ -118,16 +118,17 @@ public class MicLevelReader implements Runnable {
             double rmssum = 0;
             for (int i=0; i<length; i++) {
                 short dat = data[i];
-                int abs = Math.abs(dat);
+                int abs;
                 switch (this) {
                     case RMS:
                     case LogRMS:
                     case SqrtRMS:
-                        rmssum += abs*abs; break;
+                        rmssum += dat*dat; break;
                     case Avg:
-                        avg += abs; break;
+                        avg += Math.abs(dat); break;
                     case dbFS:
                     case Max:
+                        abs = Math.abs(dat);
                         if (abs > max) max = abs;
 
                 }
