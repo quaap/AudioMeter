@@ -23,6 +23,7 @@ package com.quaap.audiometer;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -47,20 +48,25 @@ public class MeterView extends LinearLayout {
     }
 
     private TextView[] mMeterElements;
-    private double mMeterMax = 0;
+
     private int mMeterBars = 0;
+
+    private double[] mMeterTicks;
 
     private final float mAlphaInactive = .03f;
     private final float mAlphaActive = 1f;
 
-    public void setupMeter(double meterMax, int numBars) {
+    public void setupMeter(double[] meterTicks) {
 
-        this.setmMeterMax(meterMax);
-        this.mMeterBars = numBars;
+        mMeterTicks = meterTicks;
 
-        mMeterElements = new TextView[numBars];
+        mMeterBars = meterTicks.length;
 
-        int fontsize = 10;
+        mMeterElements = new TextView[mMeterBars];
+
+        int fontsize = 200/mMeterBars;
+
+        removeAllViews();
 
         for (int i = 0; i < mMeterElements.length; i++) {
 
@@ -69,7 +75,8 @@ public class MeterView extends LinearLayout {
             addView(mMeterElements[i]);
             addView(new Space(getContext()));
 
-            mMeterElements[i].setText("_________________________");
+            int ind = mMeterBars - i - 1;
+            mMeterElements[i].setText(String.format("%-5.0f",meterTicks[ind]) + "_________________________");
             mMeterElements[i].setTextSize(fontsize);
             mMeterElements[i].setAlpha(mAlphaInactive);
 
@@ -91,7 +98,20 @@ public class MeterView extends LinearLayout {
     }
 
     public void setMeterValue(double val) {
-        setMeterBars((int) (val / getmMeterMax() * mMeterBars));
+       // setMeterBars((int) (val / getMeterMax() * mMeterBars));
+        if (val<mMeterTicks[0]) {
+            setMeterBars(0);
+        } else {
+            //Log.d("m", "================\n" + val);
+            for (int i = 1; i < mMeterTicks.length; i++) {
+               // Log.d("m", val + " "  + mMeterTicks[i]);
+
+                if (val <= mMeterTicks[i]) {
+                    setMeterBars(i);
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -107,11 +127,11 @@ public class MeterView extends LinearLayout {
         }
     }
 
-    public double getmMeterMax() {
-        return mMeterMax;
+    public double getMeterMax() {
+        return mMeterTicks[mMeterTicks.length-1];
+    }
+    public double getMeterMin() {
+        return mMeterTicks[0];
     }
 
-    public void setmMeterMax(double mMeterMax) {
-        this.mMeterMax = mMeterMax;
-    }
 }

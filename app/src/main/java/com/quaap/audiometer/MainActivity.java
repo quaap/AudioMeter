@@ -23,7 +23,6 @@ package com.quaap.audiometer;
 import android.Manifest;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private double mScale = 1;
     private MeterView mMeterView;
-    private AtomicInteger mMeterValue = new AtomicInteger();
+    private double mMeterValue = 0;
 
     private MicLevelReader mMicLevelReader;
 
+    private static final int NUMBARS = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +65,8 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         setContentView(R.layout.activity_main);
         mMeterView = (MeterView)findViewById(R.id.meterLayout);
 
-        mMicLevelReader = new MicLevelReader(this, MicLevelReader.LevelMethod.SqrtRMS);
+        mMicLevelReader = new MicLevelReader(this, MicLevelReader.LevelMethod.dbFS);
 
-        mMeterView.setupMeter(mMicLevelReader.getMaxLevel(), 20);
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
 
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
 
         final SharedPreferences pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
-        MicLevelReader.LevelMethod levM = MicLevelReader.LevelMethod.valueOf(pref.getString("levelMethod", MicLevelReader.LevelMethod.SqrtRMS.toString()));
+        MicLevelReader.LevelMethod levM = MicLevelReader.LevelMethod.valueOf(pref.getString("levelMethod", MicLevelReader.LevelMethod.dbFS.toString()));
 
         final Spinner levelType = (Spinner)findViewById(R.id.levelType);
         ArrayAdapter<MicLevelReader.LevelMethod> levelTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, MicLevelReader.LevelMethod.values());
@@ -167,7 +167,11 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private void levelMethodChanged(MicLevelReader.LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
-        mMeterView.setmMeterMax(mMicLevelReader.getMaxLevel());
+        mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
+//        double [] ticks = levelMethod.getTicks(NUMBARS);
+//        for (int i=0; i<ticks.length; i++) {
+//            Log.d("ticks", i + " " + ticks[i]);
+//        }
     }
 
     private void setScale() {
@@ -197,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     @Override
     public void valueCalculated(double level) {
-        mMeterValue.set((int)(level * mScale));
-        System.out.println(level);
+        mMeterValue = level * mScale;
+        //System.out.println(rmsavg);
 
         mHandler.obtainMessage(1).sendToTarget();
     }
@@ -207,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (mMicLevelReader.isRunning()) {
-                mMeterView.setMeterValue(mMeterValue.intValue());
+                mMeterView.setMeterValue(mMeterValue);
             }
         }
     };
