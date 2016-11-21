@@ -180,12 +180,19 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         }
     }
 
+    private void setUnits()  {
+        TextView units = (TextView)findViewById(R.id.units);
+        String str = mMicLevelReader.getLevelMethod().toString();
+        if (mScale!=1) {
+            str += " x " + String.format("%1.1f", mScale);
+        }
+        units.setText(str);
+    }
     private void levelMethodChanged(LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
         mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
 
-        TextView units = (TextView)findViewById(R.id.units);
-        units.setText(levelMethod.toString());
+        setUnits();
 
 //        double [] ticks = levelMethod.getTicks(NUMBARS);
 //        for (int i=0; i<ticks.length; i++) {
@@ -196,8 +203,9 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     private void setScale() {
         final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
-        mScale = (scaleCtrl.getProgress()+.001)/(scaleCtrl.getMax()/2);
+        mScale = ((double)scaleCtrl.getProgress())/(scaleCtrl.getMax()/2);
         scaleVal.setText(String.format("%1.1f", mScale));
+        setUnits();
     }
 
 
@@ -220,8 +228,9 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     @Override
     public void valueCalculated(double level) {
-        mMeterValue = level * mScale;
-        //System.out.println(rmsavg);
+        //We do it this way to make negative dBFS work
+        mMeterValue = level + Math.abs(level) * (mScale-1);
+      //  System.out.println(mMeterValue + " = " + level + " * " + mScale);
 
         mHandler.obtainMessage(1).sendToTarget();
     }
