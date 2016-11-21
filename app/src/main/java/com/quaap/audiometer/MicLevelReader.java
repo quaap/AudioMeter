@@ -97,9 +97,11 @@ public class MicLevelReader implements Runnable {
         public double[] getTicks(int levels) {
             short[] data = new short[levels];
 
+            //generate the raw pcm data
+            double step = Short.MAX_VALUE/(double)levels;
             for (int i=0; i<levels; i++) {
-                short v = (short)((i+1)*Short.MAX_VALUE/(double)levels);
-                data[i++] = v;
+                short v = (short)((i+1)*step);
+                data[i] = v;
             }
 
             double[] retdata = new double[levels];
@@ -111,7 +113,7 @@ public class MicLevelReader implements Runnable {
         }
 
         public double calculate(short[] data, int length) {
-            int max = 0;
+            double max = 0;
             double avg = 0;
             double rmssum = 0;
             for (int i=0; i<length; i++) {
@@ -123,7 +125,8 @@ public class MicLevelReader implements Runnable {
                     case SqrtRMS:
                         rmssum += abs*abs; break;
                     case Avg:
-                        avg += abs;
+                        avg += abs; break;
+                    case dbFS:
                     case Max:
                         if (abs > max) max = abs;
 
@@ -138,13 +141,13 @@ public class MicLevelReader implements Runnable {
                 case Avg:
                     resultval = avg/length; break;
                 case LogRMS:
-                    rmsavg = Math.sqrt(rmssum/length);
+                    rmsavg = Math.sqrt(rmssum/length) / .7f;
                     resultval = Math.log(rmsavg); break;
                 case SqrtRMS:
-                    rmsavg = Math.sqrt(rmssum/length);
+                    rmsavg = Math.sqrt(rmssum/length) / .7f;
                     resultval = Math.sqrt(rmsavg); break;
                 case RMS:
-                    rmsavg = Math.sqrt(rmssum/length);
+                    rmsavg = Math.sqrt(rmssum/length) / .7f;
                     resultval = rmsavg; break;
                 case dbFS:
                     resultval = 20*Math.log10(max/Short.MAX_VALUE); break;

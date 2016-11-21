@@ -31,6 +31,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private MicLevelReader mMicLevelReader;
 
-    private static final int NUMBARS = 20;
+    private static final int NUMBARS = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,10 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     private void levelMethodChanged(MicLevelReader.LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
         mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
+        double [] ticks = levelMethod.getTicks(NUMBARS);
+        for (int i=0; i<ticks.length; i++) {
+            Log.d("ticks", i + " " + ticks[i]);
+        }
     }
 
     private void setScale() {

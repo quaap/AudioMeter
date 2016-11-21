@@ -23,6 +23,7 @@ package com.quaap.audiometer;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -63,7 +64,7 @@ public class MeterView extends LinearLayout {
 
         mMeterElements = new TextView[mMeterBars];
 
-        int fontsize = 10;
+        int fontsize = 200/mMeterBars;
 
         removeAllViews();
 
@@ -74,7 +75,8 @@ public class MeterView extends LinearLayout {
             addView(mMeterElements[i]);
             addView(new Space(getContext()));
 
-            mMeterElements[i].setText(meterTicks[i] + "_________________________");
+            int ind = mMeterBars - i - 1;
+            mMeterElements[i].setText(String.format("%-5.0f",meterTicks[ind]) + "_________________________");
             mMeterElements[i].setTextSize(fontsize);
             mMeterElements[i].setAlpha(mAlphaInactive);
 
@@ -96,7 +98,19 @@ public class MeterView extends LinearLayout {
     }
 
     public void setMeterValue(double val) {
-        setMeterBars((int) (val / getMeterMax() * mMeterBars));
+       // setMeterBars((int) (val / getMeterMax() * mMeterBars));
+        if (val<mMeterTicks[0]) {
+            setMeterBars(0);
+        } else {
+            //Log.d("m", "================\n" + val);
+            for (int i = 1; i < mMeterTicks.length; i++) {
+              //  Log.d("m", val + " "  + mMeterTicks[i]);
+                if (val <= mMeterTicks[i]) {
+                    setMeterBars(i);
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -114,6 +128,9 @@ public class MeterView extends LinearLayout {
 
     public double getMeterMax() {
         return mMeterTicks[mMeterTicks.length-1];
+    }
+    public double getMeterMin() {
+        return mMeterTicks[0];
     }
 
 }
