@@ -74,8 +74,8 @@ public class MicLevelReader implements Runnable {
 
 
 
+            short sData[] = new short[RECORDER_BUFFER_SIZE];
             while (mIsRunning && recorder.getState()==AudioRecord.STATE_INITIALIZED) {
-                short sData[] = new short[RECORDER_BUFFER_SIZE];
 
                 int read = recorder.read(sData, 0, RECORDER_BUFFER_SIZE);
                 if (read==0) {
@@ -95,21 +95,21 @@ public class MicLevelReader implements Runnable {
         dbFS, SqrtRMS, RMS, LogRMS, Max, Avg;
 
         public double[] getTicks(int levels) {
-            short[] data = new short[levels];
 
             //generate the raw pcm data
             double step = Short.MAX_VALUE/(double)levels;
-            for (int i=0; i<levels; i++) {
-                short v = (short)((i+1)*step);
-                data[i] = v;
-            }
 
             double[] retdata = new double[levels];
 
             for (int i=0; i<levels; i++) {
-                retdata[i] = calculate(new short[]{data[i]}, 1);
+                short v = (short)((i+1)*step - step/2);
+                retdata[i] = calculate(new short[]{v});
             }
             return retdata;
+        }
+
+        public double calculate(short[] data) {
+            return calculate(data, data.length);
         }
 
         public double calculate(short[] data, int length) {

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private double mScale = 1;
     private MeterView mMeterView;
-    private AtomicInteger mMeterValue = new AtomicInteger();
+    private double mMeterValue = 0;
 
     private MicLevelReader mMicLevelReader;
 
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     @Override
     public void valueCalculated(double level) {
-        mMeterValue.set((int)(level * mScale));
+        mMeterValue = level * mScale;
         //System.out.println(rmsavg);
 
         mHandler.obtainMessage(1).sendToTarget();
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     public Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (mMicLevelReader.isRunning()) {
-                mMeterView.setMeterValue(mMeterValue.intValue());
+                mMeterView.setMeterValue(mMeterValue);
             }
         }
     };
