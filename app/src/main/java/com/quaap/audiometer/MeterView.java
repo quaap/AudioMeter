@@ -102,9 +102,9 @@ public class MeterView extends LinearLayout {
         if (val<mMeterTicks[0]) {
             setMeterBars(0);
         } else {
-            Log.d("m", "================\n" + val);
+            //Log.d("m", "================\n" + val);
             for (int i = 1; i < mMeterTicks.length; i++) {
-                Log.d("m", val + " "  + mMeterTicks[i]);
+               // Log.d("m", val + " "  + mMeterTicks[i]);
 
                 if (val <= mMeterTicks[i]) {
                     setMeterBars(i);

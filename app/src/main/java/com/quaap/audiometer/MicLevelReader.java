@@ -104,6 +104,7 @@ public class MicLevelReader implements Runnable {
             for (int i=0; i<levels; i++) {
                 short v = (short)((i+1)*step - step/2);
                 retdata[i] = calculate(new short[]{v});
+
             }
             return retdata;
         }
@@ -142,13 +143,13 @@ public class MicLevelReader implements Runnable {
                 case Avg:
                     resultval = avg/length; break;
                 case LogRMS:
-                    rmsavg = Math.sqrt(rmssum/length) / .7f;
+                    rmsavg = Math.sqrt(rmssum/length);
                     resultval = Math.log(rmsavg); break;
                 case SqrtRMS:
-                    rmsavg = Math.sqrt(rmssum/length) / .7f;
+                    rmsavg = Math.sqrt(rmssum/length);
                     resultval = Math.sqrt(rmsavg); break;
                 case RMS:
-                    rmsavg = Math.sqrt(rmssum/length) / .7f;
+                    rmsavg = Math.sqrt(rmssum/length);
                     resultval = rmsavg; break;
                 case dbFS:
                     resultval = 20*Math.log10(max/Short.MAX_VALUE); break;
