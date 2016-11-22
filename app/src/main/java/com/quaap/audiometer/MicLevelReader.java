@@ -35,6 +35,8 @@ public class MicLevelReader implements Runnable {
     private boolean mIsRunning = false;
     private LevelMethod mLevelMethod = LevelMethod.RMS;
 
+    private double scale = 1.0;
+
     private final MicLevelReaderValueListener mValueListener;
 
     public MicLevelReader(MicLevelReaderValueListener valueListener, LevelMethod levelMethod) {
@@ -81,7 +83,7 @@ public class MicLevelReader implements Runnable {
                 if (read==0) {
                     continue;
                 }
-                double resultval = mLevelMethod.calculate(sData, read);
+                double resultval = mLevelMethod.calculate(sData, read, scale);
                 mValueListener.valueCalculated(resultval);
 
             }
@@ -91,6 +93,13 @@ public class MicLevelReader implements Runnable {
         }
     }
 
+    public double getScale() {
+        return scale;
+    }
+
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
 
 
     public interface MicLevelReaderValueListener {

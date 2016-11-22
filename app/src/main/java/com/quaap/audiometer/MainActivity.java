@@ -50,18 +50,20 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     private Thread mRecorderThread = null;
 
-    private double mScale = 1;
     private MeterView mMeterView;
     private double mMeterValue = 0;
 
     private MicLevelReader mMicLevelReader;
 
     private static final int NUMBARS = 20;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
         mMeterView = (MeterView)findViewById(R.id.meterLayout);
 
         mMicLevelReader = new MicLevelReader(this, LevelMethod.dBFS);
@@ -84,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         });
 
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
+
+        scaleCtrl.setProgress(pref.getInt("scaleCtrl", scaleCtrl.getProgress()));
 
         setScale();
 
@@ -120,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
         });
 
 
-        final SharedPreferences pref = getApplicationContext().getSharedPreferences("main", MODE_PRIVATE);
         LevelMethod levM = LevelMethod.valueOf(pref.getString("levelMethod", LevelMethod.dBFS.toString()));
 
         final Spinner levelType = (Spinner)findViewById(R.id.levelType);
@@ -133,9 +136,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 LevelMethod lmeth = (LevelMethod)adapterView.getSelectedItem();
                 levelMethodChanged(lmeth);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString("levelMethod", lmeth.toString());
-                editor.apply();
+
             }
 
             @Override
@@ -183,14 +184,17 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     private void setUnits()  {
         TextView units = (TextView)findViewById(R.id.units);
         String str = mMicLevelReader.getLevelMethod().toString();
-        if (mScale!=1) {
-            str += " x " + String.format("%1.1f", mScale);
+        if (mMicLevelReader.getScale()!=1) {
+            str += " x " + String.format("%1.1f", mMicLevelReader.getScale());
         }
         units.setText(str);
     }
     private void levelMethodChanged(LevelMethod levelMethod) {
         mMicLevelReader.setLevelMethod(levelMethod);
         mMeterView.setupMeter(levelMethod.getTicks(NUMBARS));
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("levelMethod", levelMethod.toString());
+        editor.apply();
 
         setUnits();
 
@@ -203,8 +207,13 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
     private void setScale() {
         final TextView scaleVal = (TextView)findViewById(R.id.scaleVal);
         final SeekBar scaleCtrl = (SeekBar)findViewById(R.id.scaleCtrl);
-        mScale = ((double)scaleCtrl.getProgress())/(scaleCtrl.getMax()/2);
-        scaleVal.setText(String.format("%1.1f", mScale));
+        mMicLevelReader.setScale(((double)scaleCtrl.getProgress())/(scaleCtrl.getMax()/2));
+        scaleVal.setText(String.format("%1.1f", mMicLevelReader.getScale()));
+
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt("scaleCtrl", scaleCtrl.getProgress());
+        editor.apply();
+
         setUnits();
     }
 
@@ -228,9 +237,7 @@ public class MainActivity extends AppCompatActivity implements MicLevelReader.Mi
 
     @Override
     public void valueCalculated(double level) {
-        //We do it this way to make negative dBFS work
-        mMeterValue = level + Math.abs(level) * (mScale-1);
-      //  System.out.println(mMeterValue + " = " + level + " * " + mScale);
+        mMeterValue = level;
 
         mHandler.obtainMessage(1).sendToTarget();
     }
