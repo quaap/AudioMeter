@@ -15,10 +15,12 @@ The app offers a few ways to calculate the audio level to display:
 * Avg: Simple average of the sound.
 
 
-Future Features
+Planned features
 * Show numbers on the scale.
 * Add dBFS (decibels relative to full-scale).
-* Hide the advanced controls by default.
+* Ability to hide the advanced controls.
+
+Future Features?
 * Make meter fit a variety of screen sizes.
 * Allow a log of the readings.
 * Fancier display.
