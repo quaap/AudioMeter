@@ -12,7 +12,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="AudioMeter"
+        android:text="@string/audiometer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtappname"
@@ -30,7 +30,7 @@
         android:layout_marginBottom="45dp" />
 
     <TextView
-        android:text="AudioMeter is open-source software.  The sourcecode and license can be found at the following link:"
+        android:text="@string/audiometer_open"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView4"
@@ -39,7 +39,7 @@
         android:layout_gravity="center_horizontal" />
 
     <TextView
-        android:text="https://github.com/quaap/AudioMeter"
+        android:text="@string/am_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
@@ -52,7 +52,7 @@
 
 
     <TextView
-        android:text="TextView"
+        android:text=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtnamelink"

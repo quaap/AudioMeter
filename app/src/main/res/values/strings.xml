@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AudioMeter</string>
+    <string name="options">Options</string>
+    <string name="about">About</string>
+    <string name="audiometer">AudioMeter</string>
+    <string name="audiometer_open">AudioMeter is open-source software. The sourcecode and license can be found at the following link:</string>
+    <string name="am_link">https://github.com/quaap/AudioMeter</string>
+    <string name="on_off">on/off</string>
+    <string name="scale">Scale</string>
+    <string name="method">Method:</string>
+    <string name="show_controls">Show Controls</string>
+    <string name="hide_controls">Hide Controls</string>
+    <string name="name_link"><![CDATA[This program was written by <a href=\'http://quaap.com/D/programming-index?from=audiometer\'>Tom Kliethermes</a>]]></string>
 </resources>

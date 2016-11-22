@@ -58,11 +58,10 @@
 
 
             <ToggleButton
-                android:text="ToggleButton"
+                android:text="@string/on_off"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/toggleButton"
-                android:layout_weight=".5"
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true" />
@@ -73,7 +72,8 @@
                 app:srcCompat="@android:drawable/arrow_up_float"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
-                android:id="@+id/show_ctrls" />
+                android:id="@+id/show_ctrls"
+                android:contentDescription="@string/show_controls" />
 
         </RelativeLayout>
 
@@ -93,7 +93,7 @@
                 android:layout_marginBottom="5dp">
 
                 <TextView
-                    android:text="Scale"
+                    android:text="@string/scale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView3"
@@ -129,7 +129,8 @@
                     app:srcCompat="@android:drawable/arrow_down_float"
                     android:id="@+id/hide_ctrls"
                     android:layout_weight=".5"
-                    android:layout_gravity="bottom|left" />
+                    android:layout_gravity="bottom|left"
+                    android:contentDescription="@string/hide_controls" />
 
                 <Space
                     android:layout_width="wrap_content"
@@ -137,7 +138,7 @@
                     android:layout_weight="2" />
 
                 <TextView
-                    android:text="Method:"
+                    android:text="@string/method"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"

@@ -18,7 +18,6 @@ public class AboutActivity extends AppCompatActivity {
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             String version = pInfo.versionName;
-            int verCode = pInfo.versionCode;
 
             System.out.println(getResources().getString(R.string.app_name));
 
@@ -28,7 +27,7 @@ public class AboutActivity extends AppCompatActivity {
 
             TextView txtnamelink = (TextView)findViewById(R.id.txtnamelink);
             txtnamelink.setMovementMethod(LinkMovementMethod.getInstance());
-            txtnamelink.setText(Html.fromHtml("This program was written by <a href='http://quaap.com/D/programming-index'>Tom Kliethermes</a>"));
+            txtnamelink.setText(Html.fromHtml(getString(R.string.name_link)));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
