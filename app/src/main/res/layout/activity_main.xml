@@ -128,7 +128,8 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@android:drawable/arrow_down_float"
                     android:id="@+id/hide_ctrls"
-                    android:layout_weight=".5" />
+                    android:layout_weight=".5"
+                    android:layout_gravity="bottom|left" />
 
                 <Space
                     android:layout_width="wrap_content"
