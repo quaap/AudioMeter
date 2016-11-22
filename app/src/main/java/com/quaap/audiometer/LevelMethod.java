@@ -21,7 +21,7 @@ package com.quaap.audiometer;
 
 
 public enum LevelMethod {
-    dBFS, dBFS_RMS, SqrtRMS, RMS, LogRMS, Max, Avg;
+    dBFS, Max, SqrtRMS, dBFS_RMS,  RMS, LogRMS, Avg;
 
     public double[] getTicks(int levels) {
 
