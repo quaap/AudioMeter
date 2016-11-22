@@ -2,8 +2,7 @@
 
 A simple (and somewhat inaccurate) VU-style audio meter.  
 
-I noticed there was no audio meter in F-Droid, so I thought I'd build one from 
-scratch. Currently this as a simple way to monitor relative sound levels (not "loudness").
+I noticed there was no audio meter in F-Droid, so I thought I'd build one. 
 
 
 The app offers a few ways to calculate the audio level to display:
