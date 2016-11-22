@@ -12,28 +12,52 @@
     android:orientation="vertical">
 
     <TextView
-        android:text="AudioMeter is open-source software.  The sourcecode can be found at the following link:"
+        android:text="AudioMeter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtappname"
+        android:gravity="center_horizontal"
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtversion"
+        android:gravity="center_horizontal"
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="45dp" />
+
+    <TextView
+        android:text="AudioMeter is open-source software.  The sourcecode and license can be found at the following link:"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView4"/>
+        android:id="@+id/textView4"
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:text="https://github.com/quaap/AudioMeter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView5"
-        android:layout_weight="1"
         android:autoLink="web"
+        android:linksClickable="true"
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1" />
+
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtnamelink"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
         android:linksClickable="true" />
 
-    <TextView
-        android:text="This program was written by Tom Kliethermes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView6" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView7" />
 </LinearLayout>
