@@ -13,11 +13,11 @@
     <string name="name_link"><![CDATA[This program was written by <a href=\'http://quaap.com/D/programming-index?from=audiometer\'>Tom Kliethermes</a>]]></string>
     <string name="help1">dBFS: Decibels relative to full scale</string>
     <string name="help2">Max: Simply show the maximum PCM value.</string>
-    <string name="help3">RMS: Root Mean Square of each sample.</string>
+    <string name="help3">RMS: Root Mean Square of the samples.</string>
     <string name="help4">dBFS_RMS: RMS converted to dBFS.</string>
     <string name="help5">SqrtRMS: Squareroot of the RMS value.</string>
     <string name="help6">LogRMS: Natural log of the RMS value.</string>
-    <string name="help7">Avg: Simple average of each sample.</string>
+    <string name="help7">Avg: Simple average of the samples.</string>
     <string name="help8">Scale: multiply the sample by the value of scale.</string>
     <string name="method_explanation">Method explanation:</string>
     <string name="help">Help</string>
