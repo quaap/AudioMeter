@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">オーディオメーター</string>
+    <string name="options">オプション</string>
+    <string name="about">アプリについて</string>
+    <string name="audiometer">オーディオメーター</string>
+    <string name="audiometer_open">オーディオメーターはオープンソース ソフトウェアです。 ソースコードとライセンスは以下のリンクで参照することができます:</string>
+    <string name="am_link">https://github.com/quaap/AudioMeter</string>
+    <string name="on_off">オン/オフ</string>
+    <string name="scale">スケール</string>
+    <string name="method">方法:</string>
+    <string name="show_controls">コントロールを表示</string>
+    <string name="hide_controls">コントロールを非表示</string>
+    <string name="name_link"><![CDATA[このプログラムは <a href=\'http://quaap.com/D/programming-index?from=audiometer\'>Tom Kliethermes</a> によって作成されました]]></string>
+</resources>
