@@ -21,4 +21,9 @@
     <string name="help8">Scale: multiply the sample by the value of scale.</string>
     <string name="method_explanation">Method explanation:</string>
     <string name="help">Help</string>
+    <string name="need_microphone">This application will not function without access to the microphone</string>
+    <string name="got_microphone">Permission granted!</string>
+    <string name="help_desc">AudioMeter uses your device\'s microphone to drive a simple VU-style meter. Given the limitations of most microphones on hand-held devices, it goes without saying that the levels measured will be inaccurate to some unknown degree, and should not be depended on for anything important.</string>
+    <string name="help_priv">This program does not collect any information from you, and does not store any of the audio data used to display the meter.</string>
+    <string name="advanced_options">Advanced options:</string>
 </resources>
