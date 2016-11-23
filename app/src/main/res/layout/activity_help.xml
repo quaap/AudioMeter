@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_help"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.quaap.audiometer.HelpActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="@string/help"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView14"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:text="@string/help8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:layout_marginBottom="15dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_vertical_margin" />
+
+    <TextView
+        android:text="@string/method_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView15"
+        android:layout_marginBottom="14dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="@string/help1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView8"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView9"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView10"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView11"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView12"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/help7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView13"
+        android:layout_marginBottom="15dp" />
+</LinearLayout>
