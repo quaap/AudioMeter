@@ -22,8 +22,12 @@ package com.quaap.audiometer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
@@ -35,16 +39,29 @@ public class MeterView extends LinearLayout {
     public MeterView(Context context) {
         super(context);
         setOrientation(VERTICAL);
+        determineScreenSize(context);
     }
 
     public MeterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setOrientation(VERTICAL);
+        determineScreenSize(context);
     }
 
     public MeterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(VERTICAL);
+        determineScreenSize(context);
+    }
+
+
+    private void determineScreenSize(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        screenHeight = size.y;
     }
 
     private TextView[] mMeterElements;
@@ -56,6 +73,8 @@ public class MeterView extends LinearLayout {
     private final float mAlphaInactive = .03f;
     private final float mAlphaActive = 1f;
 
+    private int screenHeight;
+
     public void setupMeter(double[] meterTicks) {
 
         mMeterTicks = meterTicks;
@@ -64,7 +83,7 @@ public class MeterView extends LinearLayout {
 
         mMeterElements = new TextView[mMeterBars];
 
-        int fontsize = 200/mMeterBars;
+        int fontsize = (int)(screenHeight/2.2/mMeterBars);
 
         removeAllViews();
 
@@ -83,8 +102,8 @@ public class MeterView extends LinearLayout {
 
             int ind = mMeterBars - i - 1;
 
-            numbers.setTextSize(fontsize);
-            balance.setTextSize(fontsize);
+            numbers.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontsize);
+            balance.setTextSize(TypedValue.COMPLEX_UNIT_PX, fontsize);
             numbers.setTypeface(Typeface.MONOSPACE);
             balance.setTypeface(Typeface.MONOSPACE);
             balance.setText(String.format(" %7s", ""));
@@ -98,8 +117,9 @@ public class MeterView extends LinearLayout {
                 numbers.setText(String.format(" %7s", ""));
             }
 
+
+            mMeterElements[i].setTextSize(TypedValue.COMPLEX_UNIT_PX, fontsize);
             mMeterElements[i].setText("_________________________");
-            mMeterElements[i].setTextSize(fontsize);
             mMeterElements[i].setAlpha(mAlphaInactive);
 
         }
