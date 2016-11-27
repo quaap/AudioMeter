@@ -4,9 +4,9 @@ A simple (and somewhat inaccurate) VU-style audio meter.
 
 I noticed there was no audio meter in F-Droid, so I thought I'd build one. 
 
-
 The app offers a few ways to calculate the audio level to display:
 
+* dBFS: Decibels relative to Full Scale.
 * RMS: Root Mean Square.  This is arguable the most correct, but it is a little insensitive at low volumes.
 * LogRMS: Natural log of RMS: My first attempt to even out the scale.  It's a little *too* sensitive to noisy mics. 
 * SqrtRMS: Squareroot of RMS: My second attempt to even out RMS: it seems to works best.  
@@ -14,12 +14,8 @@ The app offers a few ways to calculate the audio level to display:
 * Avg: Simple average of the sound.
 
 
-Planned features
-* Show numbers on the scale.
-* Add dBFS (decibels relative to full-scale).
-* Ability to hide the advanced controls.
-
 Future Features?
-* Make meter fit a variety of screen sizes.
 * Allow a log of the readings.
-* Fancier display.
+* Fancier display options.
+* Peak markers.
+* Take background noise into account.
