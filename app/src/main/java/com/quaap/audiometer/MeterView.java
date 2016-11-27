@@ -109,7 +109,7 @@ public class MeterView extends LinearLayout {
             balance.setText(String.format(" %7s", ""));
             if (i%2==0) {
                 String fmt = "%7.1f ";
-                if (meterTicks[ind]>15) {
+                if (Math.abs(meterTicks[ind])>22) {
                     fmt = "%7.0f ";
                 }
                 numbers.setText(String.format(fmt, meterTicks[ind]));
