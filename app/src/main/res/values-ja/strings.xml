@@ -11,4 +11,19 @@
     <string name="show_controls">コントロールを表示</string>
     <string name="hide_controls">コントロールを非表示</string>
     <string name="name_link"><![CDATA[このプログラムは <a href=\'http://quaap.com/D/programming-index?from=audiometer\'>Tom Kliethermes</a> によって作成されました]]></string>
+    <string name="help1">dBFS: フルスケールに比例したデシベル</string>
+    <string name="help2">Max: 単純に最大 PCM 値を表示します。</string>
+    <string name="help3">RMS: サンプルの二乗平均平方根。</string>
+    <string name="help4">dBFS_RMS: dBFS に変換した RMS。</string>
+    <string name="help5">SqrtRMS: RMS 値の平方根。</string>
+    <string name="help6">LogRMS: RMS 値の自然対数。</string>
+    <string name="help7">Avg: サンプルの単純平均。</string>
+    <string name="help8">Scale: サンプルにスケールの値を掛けます。</string>
+    <string name="method_explanation">方法の説明:</string>
+    <string name="help">ヘルプ</string>
+    <string name="need_microphone">このアプリケーションは、マイクへアクセスできないと機能しません</string>
+    <string name="got_microphone">アクセス許可を付与しました!</string>
+    <string name="help_desc">AudioMeter は、デバイスのマイクを使って簡単な VU スタイルのメーターを駆動します。 ほとんどのハンドヘルド機器のマイクロホンには限界があるため、言うまでもなく測定されたレベルは全く不正確であり、重要な目的に使用してはいけません。</string>
+    <string name="help_priv">このプログラムはあなたのいかなる情報も収集しません。また、メーターを表示するために使用される音声データも格納しません。</string>
+    <string name="advanced_options">詳細オプション:</string>
 </resources>
