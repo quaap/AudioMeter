@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">AudioMètre</string>
+    <string name="options">Options</string>
+    <string name="about">À Propos</string>
+    <string name="audiometer">AudioMètre</string>
+    <string name="audiometer_open">AudioMètre (AudioMeter dans sa version originale anglaise) est un logiciel open-source. Le code source et la licence peuvent être trouvés à l\'adresse suivante :</string>
+    <string name="am_link">https://github.com/quaap/AudioMeter</string>
+    <string name="on_off">On/Off</string>
+    <string name="scale">Échelle</string>
+    <string name="method">Méthode :</string>
+    <string name="show_controls">Show Controls</string>
+    <string name="hide_controls">Cacher les  Controls</string>
+    <string name="name_link"><![CDATA[Ce programme a été écrit par<a href=\'http://quaap.com/D/programming-index?from=audiometer\'>Tom Kliethermes</a>]]></string>
+    <string name="help1">dBFS : Décibels par rapport à l\'échelle globale</string>
+    <string name="help2">Max : Montre simplement la valeur maxiamle de MIC.</string>
+    <string name="help3">RMS : Valeur moyenne quadratique des échantillons.</string>
+    <string name="help4">dBFS_RMS : RMS converti en dB FS.</string>
+    <string name="help5">SqrtRMS : Racine carrée de la valeur RMS.</string>
+    <string name="help6">LogRMS : Log naturel de la valeur RMS.</string>
+    <string name="help7">Avg : Simple moyenne des échantillons.</string>
+    <string name="help8">Scale : Multiplie la valeur de l\'échantillon par la valeur de l\'échelle.</string>
+    <string name="method_explanation">Explication de la méthode :</string>
+    <string name="help">Aide</string>
+    <string name="need_microphone">Cette application ne fonctionnera pas sans accès au microphone</string>
+    <string name="got_microphone">Permission accordée!</string>
+    <string name="help_desc">AudioMètre utilise le micro de votre appareil pour afficher une échelle relative du bruit. Du fait de la limitation technique de la plupart des micros de portables et tablettes, cela va sans dire que le niveau mesuré sera imprécis à un degré inconnus, et ne devra être utilisé pour rien d\'important.</string>
+    <string name="help_priv">Ce programme ne collecte aucune donnée sur vous et ne stocke aucune donnée audio utilisée pour afficher les mesures à l\écran.</string>
+    <string name="advanced_options">Options avancées :</string>
+</resources>
