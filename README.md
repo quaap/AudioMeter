@@ -2,7 +2,10 @@
 
 A simple (and somewhat inaccurate) VU-style audio meter.  
 
-I noticed there was no audio meter in F-Droid, so I thought I'd build one. 
+I noticed there was no audio meter in F-Droid, so I thought I'd build one. You can find it here :
+
+<a href="https://f-droid.org/packages/com.quaap.audiometer/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="90"/></a>
 
 The app offers a few ways to calculate the audio level to display:
 
